@@ -1,3 +1,4 @@
+# TABLA DE USUARIOS
 CREATE TABLE users(
     id INT PRIMARY KEY AUTO_INCREMENT,
     name VARCHAR (500) NOT NULL,
@@ -7,11 +8,52 @@ CREATE TABLE users(
     created datetime NOT NULL DEFAULT CURRENT_TIMESTAMP
 );
 
-INSERT INTO users (name, email, password)
-VALUES ('Juan Rojas', 'juanca.rojas.9810@gmail.com', '123456789');
+# INSERT INTO users (name, email, password)
+# VALUES ('Juan Rojas', 'juanca.rojas.9810@gmail.com', '123456789');
 
+# TABLA DE MESAS
 CREATE TABLE tables(
     id INT PRIMARY KEY AUTO_INCREMENT,
     name VARCHAR(100) NOT NULL,
     active int(5) NOT NULL DEFAULT 1
-)
+);
+
+# TABLA DE CATEGORIAS
+CREATE TABLE categories(
+    id INT PRIMARY KEY AUTO_INCREMENT,
+    name VARCHAR(250) NOT NULL,
+    status INT(5) NOT NULL DEFAULT 1
+);
+
+# TABLA DE MARCAS
+CREATE TABLE brands(
+    id INT PRIMARY KEY AUTO_INCREMENT,
+    name VARCHAR(250) NOT NULL,
+    status INT(5) NOT NULL DEFAULT 1
+);
+
+# TABLA DE PRODUCTOS
+CREATE TABLE products(
+    id INT PRIMARY KEY AUTO_INCREMENT,
+    name VARCHAR(250) NOT NULL,
+    description VARCHAR(500) DEFAULT NULL,
+    category_id INT NOT NULL,
+    brand_id INT NOT NULL,
+    quantity INT NOT NULL,
+    price INT NOT NULL,
+    created datetime NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    updated datetime NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
+);
+
+# TABLA DE MOVIMIENTOS
+CREATE TABLE movements(
+    id INT PRIMARY KEY AUTO_INCREMENT,
+    product_id INT NOT NULL,
+    user_id INT NOT NULL,
+    movement_type INT NOT NULL,
+    quantity INT NOT NULL,
+    sale_id INT DEFAULT NULL,
+    created datetime NOT NULL DEFAULT CURRENT_TIMESTAMP
+);
+
+TRUNCATE TABLE products

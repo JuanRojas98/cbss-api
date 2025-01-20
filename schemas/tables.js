@@ -1,9 +1,9 @@
-import { z } from 'zod'
+import {z} from 'zod'
 
 const tableSchema = z.object({
     name: z.string({
-        invalid_type_error: 'User name must be a string',
-        required_error: 'User name is required'
+        invalid_type_error: 'Table name must be a string',
+        required_error: 'Table name is required'
     })
 })
 

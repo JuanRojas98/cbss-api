@@ -1,4 +1,4 @@
-import { db } from '../database/conn.js'
+import {db} from '../database/conn.js'
 
 export class UserModel {
     static async getUsers() {
@@ -9,7 +9,7 @@ export class UserModel {
         return users
     }
 
-    static async getUserById({ id }) {
+    static async getUserById({id}) {
         const [user] = await db.query(
             'SELECT * FROM users WHERE id = ?;',
             [id]
@@ -20,7 +20,7 @@ export class UserModel {
         return user[0]
     }
 
-    static async getUserByEmail({ email }) {
+    static async getUserByEmail({email}) {
         const [user] = await db.query(
             'SELECT * FROM users WHERE email = ?;',
             [email]
@@ -31,8 +31,8 @@ export class UserModel {
         return user[0]
     }
 
-    static async createUser({ body }) {
-        const { name, email, password } = body
+    static async createUser({body}) {
+        const {name, email, password} = body
 
         let sql = 'INSERT INTO users(name, email, password) VALUES(?, ?, ?);'
         let params = [name, email, password]
@@ -42,11 +42,11 @@ export class UserModel {
         return resultInsert[0].insertId
     }
 
-    static async updateUser({ id, body }) {
+    static async updateUser({id, body}) {
         let sql = 'UPDATE users SET ? WHERE id = ?;'
         let params = [body, id]
 
-        const resultUpdate  = await db.query(sql, params)
+        const resultUpdate = await db.query(sql, params)
         return resultUpdate[0]
     }
 }
