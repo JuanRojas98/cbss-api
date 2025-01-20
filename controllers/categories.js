@@ -45,7 +45,7 @@ export class CategoryController {
 
             const {id} = req.params
             const updateCategory = await CategoryModel.updateCategory({id, body: req.body})
-            res.status(201).json({message: 'Category updated successfully'})
+            res.json({message: 'Category updated successfully'})
         } catch (err) {
             console.log(err)
             res.status(500).json({message: 'Internal server error'})

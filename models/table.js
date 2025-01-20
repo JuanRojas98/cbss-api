@@ -3,7 +3,15 @@ import {db} from '../database/conn.js'
 export class TableModel {
     static async getTables() {
         const [tables] = await db.query(
-            'SELECT * FROM tables;',
+            `SELECT
+                 t.id,
+                 t.name,
+                 CASE
+                     WHEN ( SELECT COUNT(*) FROM sales s WHERE s.table_id = t.id ) > 0 THEN 0
+                     ELSE 1
+                 END AS available
+             FROM tables t
+             WHERE t.active = 1`,
         )
 
         return tables

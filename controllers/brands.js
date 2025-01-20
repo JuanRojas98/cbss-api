@@ -48,7 +48,7 @@ export class BrandController {
 
             const {id} = req.params
             const updateBrand = await BrandModel.updateBrand({id, body: req.body})
-            res.status(201).json({message: 'Brand updated successfully'})
+            res.json({message: 'Brand updated successfully'})
         }
         catch (err) {
             console.log(err)

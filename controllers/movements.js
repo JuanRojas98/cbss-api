@@ -30,7 +30,7 @@ export class MovementController {
             if (!valid.success) res.status(422).json({message: valid.error.message})
 
             const createMovement = await MovementModel.createMovement({body: valid.data})
-            res.status(201).json({message: 'Movement created successfully'})
+            res.json({message: 'Movement created successfully'})
         }
         catch (err) {
             res.status(500).json({message: 'Internal server error'})

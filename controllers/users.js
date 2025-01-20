@@ -41,7 +41,7 @@ export class UsersController {
 
         const {id} = req.params
         const updateUser = await UserModel.updateUser({id, body: req.body})
-        res.status(201).json({message: 'User updated successfully'})
+        res.json({message: 'User updated successfully'})
     }
 
     static async login(req, res) {
@@ -71,7 +71,7 @@ export class UsersController {
             },
             process.env.JWT_SECRET_KEY,
             {
-                expiresIn: '30d'
+                expiresIn: '1d'
             }
         )
 

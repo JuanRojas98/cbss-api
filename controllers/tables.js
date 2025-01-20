@@ -46,7 +46,7 @@ export class TableController {
 
             const {id} = req.params
             const updateTable = await TableModel.updateTable({id, body: req.body})
-            res.status(201).json({message: 'Table updated successfully'})
+            res.json({message: 'Table updated successfully'})
         } catch (err) {
             console.log(err)
             res.status(500).json({message: 'Internal server error'})
