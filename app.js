@@ -1,5 +1,6 @@
 import express, {json, urlencoded} from 'express'
 import 'dotenv/config'
+import {corsMiddleware} from './middlewares/cors.js'
 import {usersRouter} from './routes/users.js'
 import {tablesRouter} from './routes/tables.js'
 import {productsRouter} from './routes/products.js'
@@ -10,6 +11,7 @@ const app = express()
 const port = process.env.PORT || 3000
 
 app.use(json())
+app.use(corsMiddleware())
 app.use(urlencoded({extended: true}))
 app.disable('x-powered-by')
 

@@ -54,7 +54,9 @@ export class UsersController {
 
         if (!isMatch) return res.status(401).json({message: 'Password invalid'})
 
-        const access_token = jwt.sign(
+        const {id, name} = user
+
+        const accessToken = jwt.sign(
             {
                 user_id: user.id,
                 email: user.email
@@ -64,7 +66,7 @@ export class UsersController {
                 expiresIn: '10min'
             }
         )
-        const refresh_token = jwt.sign(
+        const refreshToken = jwt.sign(
             {
                 user_id: user.id,
                 email: user.email
@@ -75,20 +77,28 @@ export class UsersController {
             }
         )
 
-        return res.status(200).json({access_token, refresh_token})
+        return res.status(200).json(
+            {
+                id,
+                name,
+                email,
+                accessToken,
+                refreshToken
+            }
+        )
     }
 
     static async refreshToken(req, res) {
-        const {oldToken} = req.body
+        const {token} = req.body
 
-        if (oldToken) res.status(400).json({message: 'No token provided'})
+        if (token) res.status(400).json({message: 'No token provided'})
 
-        const {user_id} = jwt.verify(oldToken, process.env.JWT_SECRET_KEY)
-        const user = await UserModel.getUserById({user_id})
+        const decodedToken = jwt.verify(token, process.env.JWT_SECRET_KEY)
+        const user = await UserModel.getUserById({user_id: decodedToken.user_id})
 
         if (!user) return res.status(404).json({message: 'User not found'})
 
-        const access_token = jwt.sign(
+        const accessToken = jwt.sign(
             {
                 user_id: user.id,
                 email: user.email
@@ -98,7 +108,7 @@ export class UsersController {
                 expiresIn: '10min'
             }
         )
-        const refresh_token = jwt.sign(
+        const refreshToken = jwt.sign(
             {
                 user_id: user.id,
                 email: user.email
@@ -109,6 +119,6 @@ export class UsersController {
             }
         )
 
-        return res.status(200).json({access_token, refresh_token})
+        return res.status(200).json({accessToken, refreshToken})
     }
 }
