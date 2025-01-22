@@ -4,17 +4,24 @@ export class ProductModel {
     static async getProducts() {
         const [products] = await db.query(
             `SELECT p.id,
-                    p.name,
-                    p.description,
-                    c.name AS category,
-                    b.name AS brand,
-                    p.quantity,
-                    (SELECT COUNT(*) FROM movements m WHERE m.product_id = p.id AND m.movement_type = 2 ) AS quantity_sold,
-                    p.price,
-                    p.created
+                p.name,
+                p.description,
+                p.category_id,
+                c.name AS category_name,
+                p.quantity,
+                (
+                    SELECT
+                        CASE
+                            WHEN SUM(si.quantity) IS NULL THEN 0
+                            ELSE SUM(si.quantity)
+                            END
+                    FROM sales_items si
+                    WHERE si.product_id = p.id
+                ) AS quantity_sold,
+                p.price,
+                p.created
              FROM products p
-                 LEFT JOIN categories c ON c.id = p.category_id
-                 LEFT JOIN brands b ON b.id = p.brand_id`
+                 LEFT JOIN categories c ON c.id = p.category_id`
         )
 
         return products

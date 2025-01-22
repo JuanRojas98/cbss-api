@@ -45,6 +45,9 @@ CREATE TABLE products(
     updated datetime NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
 );
 
+alter table products
+modify brand_id int null;
+
 # TABLA DE MOVIMIENTOS
 CREATE TABLE movements(
     id INT PRIMARY KEY AUTO_INCREMENT,
@@ -149,3 +152,23 @@ SELECT
     END AS available
 FROM tables t
 WHERE t.active = 1
+
+SELECT p.id,
+       p.name,
+       p.description,
+       p.category_id,
+       c.name AS category_name,
+       p.quantity,
+       (
+           SELECT
+               CASE
+                  WHEN SUM(si.quantity) IS NULL THEN 0
+                  ELSE SUM(si.quantity)
+               END
+           FROM sales_items si
+           WHERE si.product_id = p.id
+       ) AS quantity_sold,
+       p.price,
+       p.created
+FROM products p
+         LEFT JOIN categories c ON c.id = p.category_id

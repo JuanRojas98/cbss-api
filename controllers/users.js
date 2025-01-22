@@ -91,10 +91,10 @@ export class UsersController {
     static async refreshToken(req, res) {
         const {token} = req.body
 
-        if (token) res.status(400).json({message: 'No token provided'})
+        if (!token) res.status(400).json({message: 'No token provided'})
 
         const decodedToken = jwt.verify(token, process.env.JWT_SECRET_KEY)
-        const user = await UserModel.getUserById({user_id: decodedToken.user_id})
+        const user = await UserModel.getUserById({id: decodedToken.user_id})
 
         if (!user) return res.status(404).json({message: 'User not found'})
 
@@ -108,17 +108,7 @@ export class UsersController {
                 expiresIn: '10min'
             }
         )
-        const refreshToken = jwt.sign(
-            {
-                user_id: user.id,
-                email: user.email
-            },
-            process.env.JWT_SECRET_KEY,
-            {
-                expiresIn: '30d'
-            }
-        )
 
-        return res.status(200).json({accessToken, refreshToken})
+        return res.status(200).json({accessToken})
     }
 }

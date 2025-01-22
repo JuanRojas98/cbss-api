@@ -12,10 +12,6 @@ const productSchema = z.object({
         invalid_type_error: 'Product categoryId must be a number',
         required_error: 'Product categoryId is required'
     }),
-    brand_id: z.number({
-        invalid_type_error: 'Product brandId must be a number',
-        required_error: 'Product brandId is required'
-    }),
     quantity: z.number({
         invalid_type_error: 'Product quantity must be a number',
         required_error: 'Product quantity is required'

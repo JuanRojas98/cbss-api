@@ -4,26 +4,29 @@ import {ProductController} from '../controllers/products.js'
 import {CategoryController} from '../controllers/categories.js'
 import {BrandController} from '../controllers/brands.js'
 import {MovementController} from "../controllers/movements.js";
+import {categoriesRouter} from "./categories.js";
 
-export const productsRouter = Router()
+export const productsRouter = Router({mergeParams: true})
 
 // Products
 productsRouter.get('/', validateAuth, ProductController.getProducts)
-productsRouter.get('/:id', validateAuth, ProductController.getProduct)
+productsRouter.get('/:id([0-9]{6})', validateAuth, ProductController.getProduct)
 productsRouter.post('/', validateAuth, ProductController.createProduct)
-productsRouter.put('/:id', validateAuth, ProductController.updateProduct)
+productsRouter.put('/:id([0-9]{6})', validateAuth, ProductController.updateProduct)
 
 // Categories
-productsRouter.get('/categories', validateAuth, CategoryController.getCategories)
-productsRouter.get('/categories/:id', validateAuth, CategoryController.getCategory)
-productsRouter.post('/categories', validateAuth, CategoryController.createCategory)
-productsRouter.put('/categories/:id', validateAuth, CategoryController.updateCategory)
+
+productsRouter.use('/categories', categoriesRouter)
+// productsRouter.post('/categories', validateAuth, CategoryController.createCategory)
+// productsRouter.get('/categories/:id([0-9]{6})', validateAuth, CategoryController.getCategory)
+// productsRouter.post('/categories', validateAuth, CategoryController.createCategory)
+// productsRouter.put('/categories/:id([0-9]{6})', validateAuth, CategoryController.updateCategory)
 
 // Brands
-productsRouter.get('/brands', validateAuth, BrandController.getBrands)
-productsRouter.get('/brands/:id', validateAuth, BrandController.getBrand)
-productsRouter.post('/brands', validateAuth, BrandController.createBrand)
-productsRouter.put('/brands/:id', validateAuth, BrandController.updateBrand)
+// productsRouter.get('/brands', validateAuth, BrandController.getBrands)
+// productsRouter.get('/brands/:id', validateAuth, BrandController.getBrand)
+// productsRouter.post('/brands', validateAuth, BrandController.createBrand)
+// productsRouter.put('/brands/:id', validateAuth, BrandController.updateBrand)
 
 // Movements
 productsRouter.get('/:id/movements', validateAuth, MovementController.getMovementsProduct)
