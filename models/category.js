@@ -3,8 +3,15 @@ import {db} from '../database/conn.js'
 export class CategoryModel {
     static async getCategories() {
         const [categories] = await db.query(
-            `SELECT *
-             FROM categories`
+            `SELECT c.id,
+                c.name,
+                (
+                    SELECT COUNT(*)
+                    FROM products p
+                    WHERE p.category_id = c.id
+                ) as total_products,
+                c.status
+             FROM categories c`
         )
 
         return categories

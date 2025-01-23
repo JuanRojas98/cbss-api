@@ -2,6 +2,7 @@ import bcryptjs from 'bcryptjs'
 import jwt from 'jsonwebtoken'
 import {UserModel} from '../models/user.js'
 import {validateUser, validatePartialUser} from "../schemas/users.js";
+import {TokenService} from "../services/token.js";
 
 export class UsersController {
     static async getUsers(req, res) {
@@ -45,70 +46,52 @@ export class UsersController {
     }
 
     static async login(req, res) {
-        const {email, password} = req.body
-        const user = await UserModel.getUserByEmail({email})
+        try {
+            const {email, password} = req.body
+            const user = await UserModel.getUserByEmail({email})
 
-        if (!user) return res.status(404).json({message: 'User not found'})
+            if (!user) return res.status(404).json({message: 'User not found'})
 
-        const isMatch = await bcryptjs.compare(password, user.password)
+            const isMatch = await bcryptjs.compare(password, user.password)
 
-        if (!isMatch) return res.status(401).json({message: 'Password invalid'})
+            if (!isMatch) return res.status(401).json({message: 'Password invalid'})
 
-        const {id, name} = user
+            const {id, name} = user
 
-        const accessToken = jwt.sign(
-            {
-                user_id: user.id,
-                email: user.email
-            },
-            process.env.JWT_SECRET_KEY,
-            {
-                expiresIn: '10min'
-            }
-        )
-        const refreshToken = jwt.sign(
-            {
-                user_id: user.id,
-                email: user.email
-            },
-            process.env.JWT_SECRET_KEY,
-            {
-                expiresIn: '1d'
-            }
-        )
+            const accessToken = await TokenService.getAccessToken(user.id)
+            const refreshToken = await TokenService.getRefreshToken(user.id)
 
-        return res.status(200).json(
-            {
-                id,
-                name,
-                email,
-                accessToken,
-                refreshToken
-            }
-        )
+            res.status(200).json(
+                {
+                    id,
+                    name,
+                    email,
+                    accessToken,
+                    refreshToken
+                }
+            )
+        }
+        catch (err) {
+            console.log(err.message)
+            res.status(500).json('Internal Server Error')
+        }
     }
 
     static async refreshToken(req, res) {
         const {token} = req.body
 
-        if (!token) res.status(400).json({message: 'No token provided'})
+        if (! token)  {
+            return res.status(403).json({message: 'No token provided'})
+        }
 
-        const decodedToken = jwt.verify(token, process.env.JWT_SECRET_KEY)
-        const user = await UserModel.getUserById({id: decodedToken.user_id})
+        try {
+            const user_id = await TokenService.verifyRefreshToken(token)
+            const accessToken = await TokenService.getRefreshToken(user_id)
 
-        if (!user) return res.status(404).json({message: 'User not found'})
-
-        const accessToken = jwt.sign(
-            {
-                user_id: user.id,
-                email: user.email
-            },
-            process.env.JWT_SECRET_KEY,
-            {
-                expiresIn: '10min'
-            }
-        )
-
-        return res.status(200).json({accessToken})
+            res.status(200).json({accessToken})
+        }
+        catch (error) {
+            return res.status(403).send('Invalid refresh token.');
+        }
     }
 }

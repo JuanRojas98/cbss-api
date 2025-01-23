@@ -1,6 +1,6 @@
-import jwt from 'jsonwebtoken'
+import {TokenService} from "../services/token.js";
 
-export const validateAuth = (req, res, next) => {
+export const validateAuth = async (req, res, next) => {
     let token = req.headers.authorization
 
     if (!token) return res.status(401).json({message: 'No token provided'})
@@ -8,11 +8,7 @@ export const validateAuth = (req, res, next) => {
     token = token.split(' ')[1]
 
     try {
-        const payload = jwt.verify(token, process.env.JWT_SECRET_KEY)
-
-        if (!payload) return res.status(401).json({message: 'Invalid token'})
-
-        req.user_id = payload.user_id
+        req.user_id = await TokenService.verifyAccessToken(token)
         next()
     } catch (err) {
         return res.status(401).json({message: 'Invalid token'})
