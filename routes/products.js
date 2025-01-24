@@ -12,7 +12,7 @@ export const productsRouter = Router({mergeParams: true})
 productsRouter.get('/', validateAuth, ProductController.getProducts)
 productsRouter.get('/:id([0-9]{6})', validateAuth, ProductController.getProduct)
 productsRouter.post('/', validateAuth, ProductController.createProduct)
-productsRouter.put('/:id([0-9]{6})', validateAuth, ProductController.updateProduct)
+productsRouter.put('/:id', validateAuth, ProductController.updateProduct)
 
 // Categories
 

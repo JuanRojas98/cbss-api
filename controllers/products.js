@@ -32,7 +32,7 @@ export class ProductController {
 
             const createProduct = await ProductModel.createProduct({body: valid.data})
             const createMovement = await MovementModel.createMovement({body: {product_id: createProduct, user_id: req.user_id, movement_type: 1, quantity: valid.data.quantity, sale_id: 0}})
-            res.status(201).json({message: 'Product has been created', product_id: createProduct})
+            res.status(201).json({message: 'El producto ha sido creado.', product_id: createProduct})
         } catch (err) {
             console.log(err)
             res.status(500).json({message: 'Internal server error'})
@@ -47,7 +47,7 @@ export class ProductController {
 
             const {id} = req.params
             const updateProduct = await ProductModel.updateProduct({id, body: req.body})
-            res.json({message: 'Product updated successfully'})
+            res.json({message: 'Producto actualizado exitosamente.'})
         } catch (err) {
             res.status(500).json({message: 'Internal server error'})
         }
