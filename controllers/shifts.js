@@ -32,8 +32,8 @@ export class ShiftController {
 
             if (! valid.success) res.status(422).json({message: valid.error.message})
 
-            const createShift =  await ShiftModel.createShift({body: valid.data})
-            res.status(201).json({message: 'Shift has been created', shift_id: createShift})
+            const shift =  await ShiftModel.createShift({body: valid.data})
+            res.status(201).json({message: 'Turno registrado e iniciado.', shift})
         }
         catch (err) {
             console.log(err)

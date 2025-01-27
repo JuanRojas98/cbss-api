@@ -18,6 +18,26 @@ CREATE TABLE tables(
     active int(5) NOT NULL DEFAULT 1
 );
 
+INSERT INTO tables(name, active)
+VALUES ('Mesa 1', 1),
+       ('Mesa 2', 1),
+       ('Mesa 3', 1),
+       ('Mesa 4', 1),
+       ('Mesa 5', 1),
+       ('Mesa 6', 1),
+       ('Mesa 7', 1),
+       ('Mesa 8', 1),
+       ('Mesa 9', 1),
+       ('Mesa 10', 1),
+       ('Mesa 11', 1),
+       ('Mesa 12', 1),
+       ('Mesa 13', 1),
+       ('Mesa 14', 1),
+       ('Mesa 15', 1),
+       ('Mesa 16', 1),
+       ('Mesa 17', 1),
+       ('Mesa 18', 1);
+
 # TABLA DE CATEGORIAS
 CREATE TABLE categories(
     id INT PRIMARY KEY AUTO_INCREMENT,
