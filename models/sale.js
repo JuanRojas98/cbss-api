@@ -63,11 +63,11 @@ export class SaleModel {
         const sale_id = resultInsert[0].insertId
 
         for (let product of products) {
-            const {product_id, quantity} = product
+            const {id, quantity} = product
 
             // Registro del producto asociado a la venta
             let sql2 = 'INSERT INTO sales_items(sales_id, product_id, quantity) VALUES(?,?,?);'
-            let params2 = [sale_id, product_id, quantity]
+            let params2 = [sale_id, id, quantity]
             const resultInsert2 = await db.query(sql2, params2)
 
             // Registro del movimiento del producto asociado a la venta

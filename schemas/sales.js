@@ -17,7 +17,7 @@ const saleSchema = z.object({
     }),
     products: z.array(
         z.object({
-            product_id: z.number({
+            id: z.number({
                 invalid_type_error: 'Sale product_id must be a number',
                 required_error: 'Sale product_id is required'
             }),
